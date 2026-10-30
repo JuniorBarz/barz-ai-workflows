@@ -12,6 +12,21 @@ O mapeamento esperado reconhece:
 - `periodo` como origem temporal da recorrência;
 - `ja_processado` como lista prévia simplificada para o exemplo.
 
+## Preservação de identificadores textuais
+
+Os valores de `referencia_texto` devem permanecer exatamente como chegaram:
+
+| Identificador | Referência textual |
+| --- | --- |
+| `SKU-SINT-001` | `00001` |
+| `SKU-SINT-002` | `00002` |
+| `SKU-SINT-003` | `00003` |
+| `SKU-SINT-004` | `00004` |
+| `SKU-SINT-005` | `00005` |
+| `SKU-SINT-006` | `00006` |
+
+Uma alteração como `00001` → `1` é erro de preservação, mesmo que os dois valores pareçam numericamente equivalentes.
+
 ## Reconciliação
 
 | Verificação | Contagem |

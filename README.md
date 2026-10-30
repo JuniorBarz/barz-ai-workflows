@@ -78,14 +78,16 @@ Mostre a reconciliação entre o total de linhas recebidas e todas as categorias
 Para continuar uma análise dividida:
 
 ```text
-Esta é a parte 2 de 4. Armazene apenas o resumo necessário por identificador e não produza a classificação final até eu enviar todas as partes.
+Esta é a parte 2 de 4. Para cada identificador e campo, conserve as observações válidas ou as frequências exatas de cada valor, os pares necessários às divergências, as contagens e a origem das linhas. Não produza a classificação final até eu enviar todas as partes.
 ```
+
+Medianas e modas de resumos parciais não podem, em geral, ser combinadas para recuperar a estatística global. Ao trabalhar em partes, o assistente deve conservar estado suficiente para uma agregação exata e para a reconciliação. Se não conseguir manter esse estado, deve declarar a limitação e não apresentar medianas, modas, divergências ou outras estatísticas globais como exatas.
 
 ### 4. Quando o assistente não aceita anexos
 
 Abra os arquivos Markdown, copie e cole primeiro o conteúdo do README e depois o conteúdo do prompt. Em seguida, cole uma pequena amostra dos dados em um bloco delimitado.
 
-Se o arquivo for grande, divida os registros em partes com a mesma estrutura. Numere cada parte e peça ao assistente para aguardar a última antes de concluir. Confirme no final que a soma das partes coincide com o total original.
+Se o arquivo for grande, divida os registros em partes com a mesma estrutura. Numere cada parte e peça ao assistente para aguardar a última antes de concluir. Confirme no final que a soma das partes coincide com o total original e que o estado necessário à agregação exata foi preservado.
 
 ### 5. Revise antes de aplicar
 
