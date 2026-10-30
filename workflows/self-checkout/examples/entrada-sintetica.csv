@@ -1,0 +1,11 @@
+id_produto,referencia_texto,periodo,descricao,peso_cadastrado_kg,peso_aferido_reg_kg,peso_aferido_conf_kg,quantidade,ja_processado
+SKU-SINT-001,00001,2026-01-05,Biscoito Exemplo 200 g,0,0.213,0.214,1,NAO
+SKU-SINT-001,00001,2026-01-06,Biscoito Exemplo 200 g,0,0.214,0.214,1,NAO
+SKU-SINT-001,00001,2026-01-07,Biscoito Exemplo 200 g,0,0.212,0.213,1,NAO
+SKU-SINT-002,00002,2026-01-05,Bebida Exemplo 500 ml,0,0.525,0.526,1,NAO
+SKU-SINT-002,00002,2026-01-06,Bebida Exemplo 500 ml,0,0.528,0.527,1,NAO
+SKU-SINT-003,00003,2026-01-05,Utensilio Exemplo,0,,0.340,1,NAO
+SKU-SINT-004,00004,2026-01-06,Produto com leitura invalida,0,invalido,0.190,1,NAO
+SKU-SINT-005,00005,2026-01-06,Item com peso cadastrado,0.315,0.318,0.317,1,NAO
+SKU-SINT-006,00006,2026-01-07,Produto ja avaliado,0,0.410,0.411,1,SIM
+

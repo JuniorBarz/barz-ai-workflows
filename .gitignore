@@ -1,0 +1,21 @@
+.superpowers/sdd/
+
+# Arquivos locais e temporários
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.tmp
+*.bak
+*.log
+~$*
+
+# Dados e configurações que não pertencem ao portfólio
+.env
+.env.*
+private/
+local/
+*.xlsx
+*.xls
+*.xlsm
+*.ods
+
