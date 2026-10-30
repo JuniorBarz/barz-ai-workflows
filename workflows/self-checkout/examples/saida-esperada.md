@@ -42,7 +42,7 @@ Uma alteração como `00001` → `1` é erro de preservação, mesmo que os dois
 
 As três últimas verificações são diagnósticas e podem se sobrepor ao recorte de peso cadastrado zero. Não devem ser somadas como se fossem uma partição das nove linhas.
 
-## Perfil descritivo
+## Perfil estatístico
 
 ### SKU-SINT-001
 
@@ -50,7 +50,7 @@ As três últimas verificações são diagnósticas e podem se sobrepor ao recor
 - Peso aferido no registro: mediana `0.213 kg`, mínimo `0.212 kg`, máximo `0.214 kg`, amplitude `0.002 kg`, sem moda única.
 - Peso aferido na conferência: mediana `0.214 kg`, mínimo `0.213 kg`, máximo `0.214 kg`, amplitude `0.001 kg`, moda `0.214 kg`.
 - A descrição contém `200 g`. Isso é conteúdo declarado e não deve ser igualado automaticamente ao peso bruto.
-- Categoria sem critérios: `Critérios pendentes`.
+- Leitura descritiva: medições estáveis neste conjunto; nenhuma classificação operacional foi solicitada neste cenário.
 
 ### SKU-SINT-002
 
@@ -58,7 +58,7 @@ As três últimas verificações são diagnósticas e podem se sobrepor ao recor
 - Peso aferido no registro: mediana `0.5265 kg`, amplitude `0.003 kg`, sem moda única.
 - Peso aferido na conferência: mediana `0.5265 kg`, amplitude `0.001 kg`, sem moda única.
 - A descrição contém `500 ml`. Não é permitido converter esse volume em massa sem densidade.
-- Categoria sem critérios: `Critérios pendentes`.
+- Leitura descritiva: volume não fornece uma massa de referência sem densidade; nenhuma classificação operacional foi solicitada neste cenário.
 
 ### Outros casos
 
@@ -67,17 +67,15 @@ As três últimas verificações são diagnósticas e podem se sobrepor ao recor
 - `SKU-SINT-005`: fica fora de um eventual recorte de peso cadastrado zero, mas continua na reconciliação.
 - `SKU-SINT-006`: recebe `Já processado`, com prioridade sobre qualquer outra categoria.
 
-## Critérios pendentes
+## Por que este exemplo não classifica
 
-Antes de uma classificação operacional, ainda faltam:
+Este arquivo continua sendo um teste estatístico. Ele não gera pré-aprovação porque:
 
-- recorrência mínima;
-- tolerância absoluta e eventual tolerância relativa;
-- campo de peso que participa da decisão;
-- tratamento de embalagem e quantidade;
-- confirmação de que `ja_processado` representa a lista anterior completa.
+- os identificadores não atendem ao layout de 13 dígitos;
+- `ja_processado` é apenas uma coluna simplificada, não um TXT anterior completo;
+- o pedido deste cenário é conferir cálculos e estados dos dados.
 
-Sem essas respostas, o exemplo demonstra estatísticas e pendências, não pré-aprovação.
+O prompt principal pode pré-aprovar uma medição única quando ela for claramente plausível e não houver conflito relevante. Essa regra é demonstrada separadamente no [exemplo operacional](operacional/).
 
 ## Revisão humana
 

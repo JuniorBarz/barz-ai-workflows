@@ -19,3 +19,6 @@ local/
 *.xlsm
 *.ods
 
+# Somente exemplos públicos e sintéticos podem versionar XLSX
+!workflows/self-checkout/examples/**/*.xlsx
+

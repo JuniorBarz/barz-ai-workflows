@@ -51,7 +51,7 @@ Abra o [guia de análise de pesos](workflows/self-checkout/README.md) e confira 
 - Preserve identificadores como texto quando zeros à esquerda forem importantes.
 - Confirme as unidades dos campos numéricos.
 
-CSV é o formato preferencial. XLSX ou TXT também podem ser usados quando o assistente escolhido aceitar esses anexos. Um TXT proprietário não deve ser interpretado sem uma especificação fornecida pelo usuário.
+XLSX é o formato habitual para relatórios de entrada. CSV é uma alternativa útil quando o assistente não aceita planilhas ou quando a inspeção textual é preferível. Um TXT proprietário não deve ser interpretado sem uma especificação fornecida pelo usuário.
 
 ### 3. Abra um novo chat
 

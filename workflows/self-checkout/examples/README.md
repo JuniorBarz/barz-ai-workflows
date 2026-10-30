@@ -1,18 +1,30 @@
 # Exemplos sintéticos
 
-Os arquivos desta pasta são inteiramente sintéticos. Nenhum nome, identificador, peso ou período veio de uma operação real.
+Esta pasta contém dois cenários complementares. Todos os nomes, códigos, pesos, cupons e períodos são fictícios.
 
-- [`entrada-sintetica.csv`](entrada-sintetica.csv) contém nove ocorrências fictícias.
-- [`saida-esperada.md`](saida-esperada.md) mostra a estrutura e algumas verificações esperadas.
+## Exemplo estatístico
 
-Os números servem para demonstrar o método. Eles não definem tolerância, recorrência mínima ou padrão operacional.
+- [`entrada-sintetica.csv`](entrada-sintetica.csv): nove ocorrências para conferir agrupamento, mediana, moda, amplitude, valores ausentes e inválidos.
+- [`saida-esperada.md`](saida-esperada.md): reconciliação e estatísticas esperadas.
 
-Para testar:
+Esse cenário é deliberadamente descritivo. Os identificadores não possuem o formato de 13 dígitos e nenhum TXT deve ser produzido. Use-o para testar cálculos e preservação dos dados, não o processo de importação.
 
-1. anexe o README e o PROMPT da pasta superior;
-2. anexe `entrada-sintetica.csv`;
-3. peça um perfil descritivo sem critérios de aprovação;
-4. compare a reconciliação e as estatísticas com `saida-esperada.md`.
+## Exemplo operacional
 
-O resultado pode variar na redação, mas não nas contagens e regras demonstradas.
+A pasta [`operacional/`](operacional/) demonstra o workflow completo:
 
+- relatório habitual em XLSX e alternativa em CSV;
+- TXT com importações anteriores;
+- uma medição única plausível;
+- várias medições consistentes;
+- medição incompatível;
+- quantidade múltipla sem regra de normalização;
+- produto já processado e produto com peso cadastrado;
+- repetição potencial entre status `n` e `c` sem eliminar eventos distintos;
+- TXT e Excel simplificado esperados.
+
+Consulte o [guia do exemplo operacional](operacional/README.md) para anexar os arquivos corretos e comparar o resultado.
+
+## Limite da validação
+
+Os arquivos esperados foram conferidos programaticamente. Isso valida estrutura, contagens, pesos, duplicidades e correspondência entre TXT e Excel. Não equivale a executar o prompt em todos os assistentes citados. Um teste manual independente exige abrir uma conversa nova e seguir o guia.

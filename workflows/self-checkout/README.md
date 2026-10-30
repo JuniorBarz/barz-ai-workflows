@@ -19,7 +19,7 @@ O processo é manual, sem API paga e sem execução de modelos pelo repositório
 
 - [`PROMPT.md`](PROMPT.md): instruções completas para o assistente.
 - [`FORMATO_TXT.md`](FORMATO_TXT.md): especificação do layout de 26 caracteres.
-- [`examples/`](examples/): entrada e saída sintéticas para estudar a etapa analítica.
+- [`examples/`](examples/): um cenário estatístico e um teste operacional completo, ambos sintéticos.
 
 ## O que anexar
 
@@ -28,11 +28,13 @@ Anexe tudo no mesmo chat:
 1. este `README.md`;
 2. o arquivo `PROMPT.md`;
 3. o arquivo `FORMATO_TXT.md`;
-4. o **Relatório Excel** com produtos, descrições, pesos cadastrados e medições;
+4. o **Relatório Excel (XLSX)** com produtos, descrições, pesos cadastrados e medições;
 5. todos os **TXTs anteriores** usados para impedir a repetição de códigos;
 6. relatórios complementares de outros períodos, quando existirem.
 
 O TXT anterior é essencial para garantir a exclusão dos códigos já processados. Sem ele, o assistente deve informar que não consegue garantir a ausência de repetições históricas.
+
+XLSX é o formato habitual de entrada. Se o assistente não aceitar planilhas ou se você quiser facilitar a inspeção, exporte uma cópia em CSV preservando códigos como texto. Anexe XLSX ou CSV, não os dois ao mesmo tempo.
 
 Se o assistente não aceitar anexos Markdown, copie e cole o conteúdo deste README, depois o `PROMPT.md` e o `FORMATO_TXT.md`, mantendo essa ordem.
 
@@ -80,6 +82,8 @@ Valide quais colunas representam código, descrição, peso cadastrado, pesos af
 
 Não permita que o assistente deduza uma unidade apenas pelo tamanho do número.
 
+Quando existirem eventos com status `n` e `c`, não elimine pares automaticamente. Considere repetição potencial somente quando as demais chaves disponíveis, como evento, cupom, horário, código e peso, também coincidirem.
+
 ### 3. Confirme o objetivo
 
 Peça explicitamente o processo completo:
@@ -125,6 +129,28 @@ O Excel simplificado deve conter:
 
 Se o assistente não puder criar arquivos, ele deve fornecer as duas tabelas na resposta e declarar essa limitação. Não aceite links de download inventados.
 
+## Teste operacional reproduzível
+
+Use os arquivos da pasta [`examples/operacional/`](examples/operacional/) para testar o processo em uma conversa nova no ChatGPT, Claude, Gemini ou outro assistente compatível.
+
+Anexe:
+
+1. este `README.md`;
+2. [`PROMPT.md`](PROMPT.md);
+3. [`FORMATO_TXT.md`](FORMATO_TXT.md);
+4. [`relatorio-ocorrencias-sintetico.xlsx`](examples/operacional/relatorio-ocorrencias-sintetico.xlsx), ou o CSV equivalente;
+5. [`importacoes-anteriores-sinteticas.txt`](examples/operacional/importacoes-anteriores-sinteticas.txt).
+
+Não anexe os arquivos com `esperada` ou `esperado` no nome durante a execução. Eles servem para conferir a resposta depois.
+
+### Mensagem pronta para copiar e colar
+
+```text
+Leia o README.md, o PROMPT.md e o FORMATO_TXT.md anexados. Analise o relatório sintético e compare os códigos com o TXT de importações anteriores. Identifique produtos com peso cadastrado igual a zero, trate registros de status n e c como duplicados somente quando evento, cupom, horário, código e peso também coincidirem, pré-aprove os pesos claramente plausíveis, separe os casos suspeitos e exclua os códigos já processados. Gere o TXT final no layout de 26 caracteres e um Excel simplificado com as abas Para importar e Deixar para depois. Antes de entregar, valide contagens, códigos, pesos, duplicidades e a correspondência entre TXT e Excel.
+```
+
+Compare o resultado com [`resultado-esperado.md`](examples/operacional/resultado-esperado.md), [`importacao-esperada.txt`](examples/operacional/importacao-esperada.txt) e [`conferencia-esperada.xlsx`](examples/operacional/conferencia-esperada.xlsx).
+
 ## Checagens obrigatórias
 
 Antes de usar o TXT ou o Excel:
@@ -160,6 +186,6 @@ Os dois campos de peso do layout recebem o mesmo peso individual em gramas neste
 - UTF-8 sem BOM e CRLF são apenas o padrão inicial quando não existe arquivo anterior compatível.
 - O TXT e o Excel não substituem a validação humana nem autorizam alteração automática do cadastro.
 
-## Exemplo sintético
+## Exemplos sintéticos
 
-A pasta [`examples/`](examples/) demonstra a análise estatística com dados inteiramente fictícios. Seus identificadores foram criados para leitura humana e não atendem deliberadamente ao formato de importação de 13 dígitos; portanto, esse exemplo não produz TXT.
+A pasta [`examples/`](examples/) contém um exemplo estatístico, que não produz TXT, e um exemplo operacional completo com XLSX, CSV, TXT anterior, TXT esperado e Excel simplificado esperado.
