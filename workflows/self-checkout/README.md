@@ -1,176 +1,165 @@
-# Análise de pesos de Self-Checkout
+# Análise e importação de pesos de Self-Checkout
 
 ## Objetivo
 
-Organizar ocorrências de divergência de peso, resumir as evidências por produto e preparar uma revisão auditável. O workflow ajuda a encontrar dados consistentes, incompletos ou conflitantes. Ele não aprova cadastros e não gera importações para um sistema.
+Reproduzir, em um assistente de IA, o processo documental completo para:
 
-O processo foi escrito para uso manual em um assistente de IA. Não requer instalação, API ou integração.
+1. identificar produtos sem peso cadastrado;
+2. analisar as medições disponíveis;
+3. pré-aprovar pesos coerentes e separar casos suspeitos;
+4. excluir códigos encontrados em TXTs anteriores;
+5. gerar uma proposta de TXT de importação;
+6. gerar, quando solicitado, um Excel simplificado de conferência.
 
-## O que você vai precisar
+O workflow não altera cadastros nem importa arquivos no sistema de destino. O TXT é uma proposta que precisa passar por validação humana e por um teste controlado no importador.
 
-Anexe ao mesmo chat:
+O processo é manual, sem API paga e sem execução de modelos pelo repositório. Pode ser usado em ChatGPT, Claude, Gemini ou outro assistente que aceite os arquivos necessários.
+
+## Arquivos deste workflow
+
+- [`PROMPT.md`](PROMPT.md): instruções completas para o assistente.
+- [`FORMATO_TXT.md`](FORMATO_TXT.md): especificação do layout de 26 caracteres.
+- [`examples/`](examples/): entrada e saída sintéticas para estudar a etapa analítica.
+
+## O que anexar
+
+Anexe tudo no mesmo chat:
 
 1. este `README.md`;
-2. o arquivo [`PROMPT.md`](PROMPT.md);
-3. um ou mais relatórios sanitizados;
-4. se existirem, listas anteriores de itens já processados;
-5. os critérios da sua operação, como recorrência mínima e tolerância.
+2. o arquivo `PROMPT.md`;
+3. o arquivo `FORMATO_TXT.md`;
+4. o **Relatório Excel** com produtos, descrições, pesos cadastrados e medições;
+5. todos os **TXTs anteriores** usados para impedir a repetição de códigos;
+6. relatórios complementares de outros períodos, quando existirem.
 
-CSV é o formato preferencial. XLSX e TXT podem ser usados quando o assistente aceitar esses anexos. Não forneça um TXT proprietário sem explicar sua estrutura.
+O TXT anterior é essencial para garantir a exclusão dos códigos já processados. Sem ele, o assistente deve informar que não consegue garantir a ausência de repetições históricas.
 
-## Entradas
+Se o assistente não aceitar anexos Markdown, copie e cole o conteúdo deste README, depois o `PROMPT.md` e o `FORMATO_TXT.md`, mantendo essa ordem.
 
-O workflow espera encontrar conceitos equivalentes aos campos abaixo. Os nomes podem variar, por isso o assistente deve mostrar o mapeamento antes de calcular.
+## Privacidade antes do envio
 
-| Conceito | Obrigatório | Uso |
-| --- | --- | --- |
-| Identificador do produto | Sim | Agrupar ocorrências e comparar listas |
-| Descrição | Sim | Localizar sinais explícitos de massa, volume ou quantidade |
-| Peso cadastrado | Recomendado | Distinguir registros sem peso dos que já possuem cadastro |
-| Peso aferido no registro | Recomendado | Uma fonte de evidência observada |
-| Peso aferido na conferência | Recomendado | Outra fonte de evidência, mantida separada |
-| Quantidade registrada | Opcional | Identificar registros que podem representar mais de uma unidade |
-| Data ou período | Opcional | Demonstrar recorrência em momentos diferentes |
-| Lista de já processados | Opcional | Excluir duplicações antes de qualquer classificação |
+Trabalhe em cópias dos arquivos e remova tudo que não seja necessário para a análise, especialmente:
 
-O identificador deve ser tratado como texto. Isso preserva zeros à esquerda e evita notação científica.
+- nomes de pessoas;
+- preços e informações comerciais sem função analítica;
+- documentos pessoais;
+- credenciais, endereços, IPs e caminhos internos;
+- observações ou colunas confidenciais.
 
-### Unidades
+Não envie arquivos operacionais para issues ou commits deste repositório. Os anexos devem permanecer somente na conversa escolhida e sob as políticas de privacidade do respectivo assistente.
 
-Confirme se os pesos estão em quilogramas, gramas ou outra unidade. Não converta valores apenas porque parecem pequenos ou grandes. Se a unidade não estiver documentada, registre a pendência.
+## Entradas esperadas
 
-Uma quantidade como `200 g` na descrição normalmente representa conteúdo líquido. A balança pode medir produto e embalagem. Da mesma forma, `500 ml` é volume e não pode ser convertido em massa sem densidade fornecida.
+Os nomes das colunas podem variar. Antes de calcular, o assistente deve identificar e confirmar conceitos equivalentes a:
 
-## Preparação
+| Conceito | Uso |
+| --- | --- |
+| Código do produto | Agrupar medições e comparar com os TXTs anteriores |
+| Descrição | Avaliar plausibilidade de massa, volume, embalagem e quantidade |
+| Peso cadastrado | Localizar produtos cujo cadastro está numericamente em zero |
+| Peso aferido no registro | Fonte de medição, mantida separada das demais |
+| Peso aferido na conferência | Segunda fonte de medição, quando disponível |
+| Quantidade e cupom | Distinguir unidades, compras múltiplas e cupons distintos |
+| Data ou período | Demonstrar recorrência ao longo do tempo |
 
-Antes de anexar os arquivos:
+Preserve os códigos como texto. Não aceite notação científica nem perda de zeros à esquerda.
 
-- trabalhe em uma cópia;
-- remova nomes de pessoas, preços, documentos, credenciais e campos sem função analítica;
-- não publique os arquivos em issues ou commits;
-- preserve o cabeçalho e os valores originais necessários;
-- confirme se o relatório já está filtrado para peso cadastrado igual a zero;
-- reúna listas anteriores usadas para evitar repetição;
-- anote o período abrangido por cada arquivo.
+## Como utilizar
 
-Se houver vários arquivos, não os una manualmente antes de entender se possuem as mesmas colunas e unidades.
+### 1. Abra uma nova conversa
 
-## Critérios que você precisa definir
-
-O workflow não possui números universais. Antes da classificação, informe:
-
-- qual população deve ser analisada;
-- se o recorte exige peso cadastrado igual a zero;
-- qual campo de peso é usado na decisão ou se ambos são apenas evidências;
-- a recorrência mínima exigida;
-- a tolerância absoluta e, se necessária, a relativa;
-- como tratar produtos vendidos por peso, conjuntos e quantidade diferente de um;
-- quais itens já foram processados.
-
-Se você ainda não souber esses critérios, peça um perfil descritivo. A IA poderá mostrar estatísticas e pendências, mas não deverá declarar um item aprovado.
-
-## Passo a passo
-
-### 1. Inicie o chat
-
-Anexe este guia, o prompt e os dados. Envie:
+Anexe os arquivos listados acima e envie:
 
 ```text
-Leia o README e o PROMPT antes de analisar. Comece pelo inventário dos arquivos, pelo mapeamento das colunas e pelas perguntas que impedem uma análise correta.
+Leia primeiro o README.md, o PROMPT.md e o FORMATO_TXT.md. Depois inventarie os relatórios e TXTs anexados, mostre o mapeamento das colunas e faça somente as perguntas essenciais antes de iniciar a análise.
 ```
 
 ### 2. Confira o mapeamento
 
-Valide a tabela que relaciona cada conceito do workflow a uma coluna real. Corrija unidades ou significados incorretos antes de continuar.
+Valide quais colunas representam código, descrição, peso cadastrado, pesos aferidos, quantidade, cupom e período. Confirme também a unidade de cada campo.
 
-### 3. Confira a qualidade da entrada
+Não permita que o assistente deduza uma unidade apenas pelo tamanho do número.
 
-A IA deve informar:
+### 3. Confirme o objetivo
 
-- arquivos e períodos reconhecidos;
-- total de linhas por arquivo;
-- identificadores ausentes ou duplicados;
-- valores brancos, zero, inválidos e unidades desconhecidas;
-- registros com peso cadastrado zero, não zero ou ausente;
-- campos de peso disponíveis.
+Peça explicitamente o processo completo:
 
-Essas contagens podem se sobrepor. A reconciliação final deve deixar claro quando uma categoria é diagnóstico e quando é uma partição do total.
+```text
+Identifique os produtos com peso cadastrado igual a zero, analise as medições, exclua todos os códigos encontrados nos TXTs anteriores e classifique os demais entre PRÉ-APROVADO e DEIXAR PARA DEPOIS. Depois gere o TXT de importação e o Excel simplificado de conferência, executando todas as validações do prompt.
+```
 
-### 4. Defina o recorte
+Se você quiser somente uma análise geral, diga para não gerar arquivos de importação.
 
-Se o arquivo não estiver filtrado, mantenha todas as linhas para a reconciliação e crie um subconjunto de análise. Não apague registros silenciosamente.
+### 4. Revise a triagem automática
 
-### 5. Agrupe por identificador
+O resultado deve separar:
 
-Para cada produto, mantenha as descrições observadas, os períodos, a quantidade de ocorrências e os dois campos de peso separados. Não misture medições de campos diferentes em uma única estatística.
+- **PRÉ-APROVADO:** peso plausível e sem conflito relevante;
+- **DEIXAR PARA DEPOIS:** dados insuficientes, conflitantes, variáveis ou ambíguos;
+- **JÁ PROCESSADO:** código presente em pelo menos um TXT anterior.
 
-### 6. Resuma as observações
+Uma única medição pode ser pré-aprovada quando for claramente plausível e não possuir conflito relevante. Isso continua sendo uma pré-validação analítica, não uma confirmação física.
 
-Para cada campo de peso, calcule somente com valores válidos:
+### 5. Obtenha o TXT de importação
 
-- quantidade válida;
-- mínimo e máximo;
-- amplitude;
-- mediana;
-- todas as modas, ou informe que não existe moda única.
+Quando houver candidatos pré-aprovados, peça:
 
-Mostre valores atípicos e possíveis conflitos. Não remova outliers sem uma regra fornecida e registrada.
+```text
+Gere o TXT somente com os itens PRÉ-APROVADOS. Valide cada linha contra o FORMATO_TXT.md, remova duplicidades e confirme que nenhum código aparece nos TXTs anteriores. Entregue o arquivo para download ou, se o ambiente não permitir arquivos, apresente o conteúdo em um bloco de texto sem cabeçalho.
+```
 
-### 7. Compare com a descrição
+Cada linha deve ter exatamente 26 caracteres. O arquivo não pode conter cabeçalho, separadores, produtos pendentes ou códigos já processados. Consulte [`FORMATO_TXT.md`](FORMATO_TXT.md) antes de aceitar o resultado.
 
-Extraia apenas tokens explícitos como `g`, `kg`, `ml`, `l` ou `un`. Use-os como sinal de revisão, não como verdade automática. Não converta volume em massa e não trate conteúdo líquido como peso bruto.
+### 6. Obtenha o Excel simplificado
 
-### 8. Remova repetições já conhecidas
+Peça também:
 
-Compare os identificadores com as listas anteriores fornecidas. `Já processado` tem prioridade sobre as demais categorias e deve permanecer visível na reconciliação.
+```text
+Gere um Excel simplificado com duas abas: Para importar e Deixar para depois. A primeira deve corresponder exatamente ao TXT; a segunda deve mostrar cada pendência e seu motivo. Entregue o arquivo para download.
+```
 
-### 9. Classifique somente com critérios definidos
+O Excel simplificado deve conter:
 
-As categorias sugeridas são:
+- **Aba Para importar:** código de barras, descrição, peso em gramas e cupons distintos;
+- **Aba Deixar para depois:** código de barras, descrição e motivo.
 
-- **Já processado:** consta em uma lista anterior.
-- **Candidato com evidência consistente:** atende aos critérios fornecidos e não possui conflito pendente.
-- **Revisar:** há incompatibilidade, ausência ou ambiguidade relevante.
-- **Aguardar mais observações:** a evidência ainda não atende à recorrência mínima definida.
+Se o assistente não puder criar arquivos, ele deve fornecer as duas tabelas na resposta e declarar essa limitação. Não aceite links de download inventados.
 
-Sem critérios fornecidos, use `Critérios pendentes` no lugar de uma conclusão operacional.
+## Checagens obrigatórias
 
-### 10. Reconcilie
+Antes de usar o TXT ou o Excel:
 
-A saída deve relacionar o total recebido a linhas fora do recorte, inválidas, já processadas e resultados finais. Nenhuma linha pode desaparecer sem explicação.
+- confirme que todos os candidatos tinham peso cadastrado numericamente igual a zero;
+- confira uma amostra dos pesos diretamente nos relatórios;
+- confirme que peso ausente, zero e inválido permaneceram estados diferentes;
+- verifique a preservação dos códigos e dos zeros à esquerda;
+- confirme que quantidade múltipla não virou peso individual sem justificativa;
+- confira que volume não foi convertido em massa sem densidade;
+- valide que itens de qualquer TXT anterior foram excluídos;
+- confirme ausência de duplicidades;
+- valide todas as linhas do TXT pelo layout de 26 caracteres;
+- compare código e peso do Excel com o TXT;
+- reconcilie o total de produtos entre pré-aprovados, pendentes e já processados;
+- teste o arquivo primeiro em um ambiente controlado do sistema de destino.
 
-## Interpretação
+## Como interpretar os resultados
 
-Recorrência alta não prova que o peso está correto; apenas mostra repetição. Baixa amplitude pode indicar estabilidade, mas pode também repetir o mesmo erro. Uma descrição compatível é uma checagem adicional, não uma autorização.
+Mediana, recorrência e baixa amplitude ajudam a avaliar consistência, mas não provam que um peso esteja correto. A descrição é uma referência de plausibilidade: peso líquido não é necessariamente peso bruto, e volume não equivale a massa sem densidade conhecida.
 
-Use a justificativa por item para localizar a evidência. Se a classificação depender de um parâmetro, a saída deve registrar o nome e o valor desse parâmetro.
-
-## Validação
-
-Antes de aplicar qualquer conclusão:
-
-- confirme a soma das linhas e categorias;
-- confira identificadores com zeros à esquerda;
-- revise registros brancos, zero e inválidos separadamente;
-- compare uma amostra com o arquivo de origem;
-- verifique se as unidades usadas são as declaradas;
-- procure descrições ou quantidades conflitantes no mesmo identificador;
-- confirme que itens já processados não foram sugeridos novamente;
-- revise outliers sem removê-los da evidência;
-- registre os critérios usados;
-- valide qualquer formato de importação fora deste workflow.
+Os dois campos de peso do layout recebem o mesmo peso individual em gramas neste formato de referência. A função específica de cada campo no importador não está documentada neste repositório; não atribua significados diferentes sem documentação do sistema de destino.
 
 ## Limitações
 
-- O assistente pode mapear uma coluna incorretamente; confirme antes do cálculo.
-- Descrições abreviadas podem omitir unidade, embalagem ou quantidade.
-- Um relatório pode registrar eventos, não unidades físicas independentes.
-- Quantidade diferente de um não deve ser normalizada sem conhecer a semântica do sistema.
-- Medições podem incluir embalagem, conjuntos ou variação operacional.
-- O workflow não define tolerâncias, recorrência mínima ou autoridade entre campos.
-- A saída apoia revisão; não altera cadastro e não substitui decisão humana.
+- A qualidade depende do mapeamento correto das colunas e unidades.
+- O relatório pode registrar eventos, e não unidades físicas independentes.
+- Leituras repetidas no mesmo cupom podem não representar novas evidências.
+- Quantidades múltiplas exigem uma regra confiável de normalização.
+- Produtos variáveis ou descrições incompletas podem permanecer pendentes.
+- Sem os TXTs anteriores, não existe garantia de exclusão histórica.
+- Um identificador incompatível com 13 dígitos deve ficar pendente; zeros não podem ser inventados.
+- UTF-8 sem BOM e CRLF são apenas o padrão inicial quando não existe arquivo anterior compatível.
+- O TXT e o Excel não substituem a validação humana nem autorizam alteração automática do cadastro.
 
-## Exemplo
+## Exemplo sintético
 
-A pasta [`examples/`](examples/) contém um CSV pequeno e uma saída ilustrativa. Os dados são inteiramente sintéticos e foram construídos para demonstrar filtros, repetição, campos ausentes, valor inválido, volume e item já processado.
-
+A pasta [`examples/`](examples/) demonstra a análise estatística com dados inteiramente fictícios. Seus identificadores foram criados para leitura humana e não atendem deliberadamente ao formato de importação de 13 dígitos; portanto, esse exemplo não produz TXT.

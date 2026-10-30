@@ -4,6 +4,8 @@
 
 Esta conferência vale somente para `entrada-sintetica.csv`. Os dados foram criados para documentação e não representam produtos ou operações reais.
 
+Os identificadores deste exemplo são deliberadamente sintéticos e não possuem os 13 dígitos exigidos pelo layout de importação. Portanto, nenhum TXT deve ser gerado a partir deste arquivo; a finalidade aqui é conferir somente a etapa analítica.
+
 O mapeamento esperado reconhece:
 
 - `id_produto` como identificador textual;
@@ -75,8 +77,8 @@ Antes de uma classificação operacional, ainda faltam:
 - tratamento de embalagem e quantidade;
 - confirmação de que `ja_processado` representa a lista anterior completa.
 
-Sem essas respostas, o exemplo demonstra estatísticas e pendências, não aprovação.
+Sem essas respostas, o exemplo demonstra estatísticas e pendências, não pré-aprovação.
 
 ## Revisão humana
 
-Uma pessoa deve conferir a unidade, o mapeamento, uma amostra das linhas e os critérios antes de usar o resultado. Este exemplo não autoriza cadastro, importação ou alteração em sistema.
+Uma pessoa deve conferir a unidade, o mapeamento, uma amostra das linhas e os critérios antes de usar o resultado. Este exemplo não autoriza cadastro, importação ou alteração em sistema e não deve produzir TXT.

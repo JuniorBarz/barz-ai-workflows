@@ -14,7 +14,7 @@ O repositório é exclusivamente documental. Nada é executado automaticamente e
 
 | Workflow | Finalidade | Arquivos |
 | --- | --- | --- |
-| Análise de pesos de Self-Checkout | Organizar ocorrências, avaliar consistência dos pesos e preparar uma revisão auditável | [Guia](workflows/self-checkout/README.md) · [Prompt](workflows/self-checkout/PROMPT.md) · [Exemplos](workflows/self-checkout/examples/) |
+| Análise e importação de pesos de Self-Checkout | Identificar produtos sem peso, analisar medições, excluir códigos anteriores e gerar uma proposta de importação | [Guia](workflows/self-checkout/README.md) · [Prompt](workflows/self-checkout/PROMPT.md) · [Formato TXT](workflows/self-checkout/FORMATO_TXT.md) · [Exemplos](workflows/self-checkout/examples/) |
 
 Novos workflows serão adicionados somente quando as regras puderem ser explicadas, sanitizadas e validadas sem expor informações privadas.
 
@@ -30,6 +30,7 @@ barz-ai-workflows/
 │   └── self-checkout/
 │       ├── README.md
 │       ├── PROMPT.md
+│       ├── FORMATO_TXT.md
 │       └── examples/
 └── templates/
     └── new-workflow/
@@ -58,10 +59,11 @@ Use um assistente que permita anexar arquivos. A interface muda entre os produto
 
 1. anexe `workflows/self-checkout/README.md`;
 2. anexe `workflows/self-checkout/PROMPT.md`;
-3. anexe os arquivos de entrada sanitizados;
-4. envie um comando inicial claro;
-5. responda às perguntas sobre colunas, unidades e critérios;
-6. revise a reconciliação e as pendências antes de aceitar a tabela final.
+3. anexe `workflows/self-checkout/FORMATO_TXT.md` quando solicitar a importação;
+4. anexe os arquivos de entrada sanitizados e todos os TXTs anteriores;
+5. envie um comando inicial claro;
+6. responda às perguntas sobre colunas, unidades e critérios;
+7. revise a reconciliação, o TXT e o Excel antes de qualquer uso.
 
 Exemplo de comando inicial:
 
@@ -91,7 +93,7 @@ Se o arquivo for grande, divida os registros em partes com a mesma estrutura. Nu
 
 ### 5. Revise antes de aplicar
 
-Uma resposta bem formatada ainda pode estar errada. Confira contagens, unidades, identificadores, fórmulas, casos ausentes e critérios configuráveis. Nunca importe ou altere cadastros diretamente a partir de uma resposta não revisada.
+Uma resposta bem formatada ainda pode estar errada. Confira contagens, unidades, identificadores, fórmulas, casos ausentes e critérios configuráveis. O assistente pode gerar uma proposta de TXT e Excel, mas nunca importe ou altere cadastros diretamente a partir de uma resposta não revisada.
 
 ## Como os workflows são escritos
 
@@ -106,7 +108,7 @@ Essa separação evita apresentar uma hipótese como regra operacional.
 
 ## Limitações
 
-- O repositório não executa modelos e não oferece automação.
+- O repositório não executa modelos nem realiza importações; a geração dos arquivos depende do assistente escolhido.
 - A qualidade da resposta depende da qualidade e da definição dos dados de entrada.
 - Nomes de colunas e formatos variam entre sistemas; o assistente deve confirmar o mapeamento.
 - Peso líquido informado na descrição não é necessariamente o peso bruto medido.
